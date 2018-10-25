@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -20,10 +19,11 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
-import HomeIcon from "@material-ui/icons/Home";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import ListIcon from "@material-ui/icons/List";
-import PeopleIcon from "@material-ui/icons/People";
-import AssessmentIcon from "@material-ui/icons/Assessment";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import TimelineIcon from "@material-ui/icons/Timeline";
+import logo from "../_assets/logoCoordinador.svg";
 
 const drawerWidth = 240;
 
@@ -109,26 +109,37 @@ const styles = theme => ({
   },
   gutters: {
     paddingRight: 0
+  },
+  selected: {
+    backgroundColor: theme.palette.primary.main
+  },
+  selectedIcon: {
+    color: theme.palette.primary.contrastText
+  },
+  selectedText: {
+    color: theme.palette.primary.contrastText
   }
 });
 
 type Props = {
   classes: Object,
   children: Object,
+  open: boolean,
+  path: string,
+  handleDrawerOpen: Function,
+  handleDrawerClose: Function,
   handleLogOut: Function
 };
 
 type State = {
   anchorEl?: string,
-  mobileMoreAnchorEl?: string,
-  open: boolean
+  mobileMoreAnchorEl?: string
 };
 
 class Header extends React.Component<Props, State> {
   state = {
     anchorEl: null,
-    mobileMoreAnchorEl: null,
-    open: false
+    mobileMoreAnchorEl: null
   };
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -147,16 +158,17 @@ class Header extends React.Component<Props, State> {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
   render() {
-    const { anchorEl, mobileMoreAnchorEl, open } = this.state;
-    const { classes, children, handleLogOut } = this.props;
+    const { anchorEl, mobileMoreAnchorEl } = this.state;
+    const {
+      classes,
+      children,
+      open,
+      path,
+      handleDrawerOpen,
+      handleDrawerClose,
+      handleLogOut
+    } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const renderMenu = (
@@ -197,6 +209,7 @@ class Header extends React.Component<Props, State> {
       <div className={classes.root}>
         <AppBar
           position="absolute"
+          color="default"
           className={classNames(classes.appBar, open && classes.appBarShift)}
         >
           <Toolbar
@@ -206,14 +219,12 @@ class Header extends React.Component<Props, State> {
             <IconButton
               color="inherit"
               aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
+              onClick={handleDrawerOpen}
               className={classNames(classes.menuButton, open && classes.hide)}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" noWrap>
-              <FormattedMessage id="header:title" defaultMessage="CircleIn" />
-            </Typography>
+            <img src={logo} alt="Coordinador Electrico Nacional" />
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton
@@ -247,17 +258,91 @@ class Header extends React.Component<Props, State> {
           open={open}
         >
           <div className={classes.toolbar}>
-            <IconButton onClick={this.handleDrawerClose}>
+            <IconButton onClick={handleDrawerClose}>
               <ChevronLeftIcon />
             </IconButton>
           </div>
           <Divider />
           <List>
-            <ListItem button component={MyLink} to="/">
+            <ListItem
+              button
+              component={MyLink}
+              to="/"
+              className={classNames(path === "/" && classes.selected)}
+            >
               <ListItemIcon>
-                <HomeIcon />
+                <DashboardIcon
+                  className={classNames(path === "/" && classes.selectedIcon)}
+                />
               </ListItemIcon>
-              <ListItemText primary="Home" />
+              <ListItemText
+                primary="Resúmen"
+                primaryTypographyProps={{ color: "inherit" }}
+                className={classNames(path === "/" && classes.selectedText)}
+              />
+            </ListItem>
+            <ListItem
+              button
+              component={MyLink}
+              to="/registro"
+              className={classNames(path === "/registro" && classes.selected)}
+            >
+              <ListItemIcon>
+                <ListIcon
+                  className={classNames(
+                    path === "/registro" && classes.selectedIcon
+                  )}
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary="Registro"
+                primaryTypographyProps={{ color: "inherit" }}
+                className={classNames(
+                  path === "/registro" && classes.selectedText
+                )}
+              />
+            </ListItem>
+            <ListItem
+              button
+              component={MyLink}
+              to="/politica"
+              className={classNames(path === "/politica" && classes.selected)}
+            >
+              <ListItemIcon>
+                <AssignmentIcon
+                  className={classNames(
+                    path === "/politica" && classes.selectedIcon
+                  )}
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary="Política"
+                primaryTypographyProps={{ color: "inherit" }}
+                className={classNames(
+                  path === "/politica" && classes.selectedText
+                )}
+              />
+            </ListItem>
+            <ListItem
+              button
+              component={MyLink}
+              to="/analisis"
+              className={classNames(path === "/analisis" && classes.selected)}
+            >
+              <ListItemIcon>
+                <TimelineIcon
+                  className={classNames(
+                    path === "/analisis" && classes.selectedIcon
+                  )}
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary="Análisis"
+                primaryTypographyProps={{ color: "inherit" }}
+                className={classNames(
+                  path === "/analisis" && classes.selectedText
+                )}
+              />
             </ListItem>
           </List>
         </Drawer>

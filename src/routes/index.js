@@ -1,6 +1,9 @@
 import React from "react";
 import { Switch } from "react-router";
-import Index from "../pages/index";
+import Summary from "../pages/summary";
+import Registro from "../pages/registro";
+import Politica from "../pages/politica";
+import Analisis from "../pages/analisis";
 import Login from "../pages/login";
 import changePassword from "../pages/change-password";
 import PrivateRoute from "./private-route";
@@ -11,7 +14,10 @@ const routes = (
     <Switch>
       <AuthRoute path="/login" component={Login} />
       <AuthRoute path="/change-password" component={changePassword} />
-      <PrivateRoute exact path="/" component={Index} />
+      <PrivateRoute exact path="/" component={Summary} />
+      <PrivateRoute exact path="/registro" component={Registro} />
+      <PrivateRoute exact path="/politica" component={Politica} />
+      <PrivateRoute exact path="/analisis" component={Analisis} />
     </Switch>
   </div>
 );
